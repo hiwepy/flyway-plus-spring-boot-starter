@@ -26,7 +26,11 @@ import org.springframework.util.ObjectUtils;
 
 /**
  * TODO
+<<<<<<< Updated upstream
  * @author 		： <a href="https://github.com/vindell">vindell</a>
+=======
+ * @author 		： <a href="https://github.com/easy-4-java">hiwepy</a>
+>>>>>>> Stashed changes
  */
 public class FlywayMigrationProvider implements ObjectProvider<FlywayMigrationStrategy>, FlywayMigrationStrategy, ApplicationContextAware {
 	
