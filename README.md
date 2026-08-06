@@ -1,25 +1,172 @@
+<a id="readme-top"></a>
+
+<div align="center">
+
 # flyway-plus-spring-boot-starter
-Spring Boot Starter For Flyway
 
-### 说明
+**Spring Boot Starter for flyway-plus**
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.easy4j/flyway-plus-spring-boot-starter)](https://github.com/easy-4-java/flyway-plus-spring-boot-starter)
+[![Java](https://img.shields.io/badge/Java-17-orange)](#3-requirements-and-compatibility)
+[![License](https://img.shields.io/badge/license-Apache-2.0-green)](https://www.apache.org/licenses/LICENSE-2.0)
 
- > 基于 Flyway 的 Spring Boot Starter 实现
+[简体中文](./README.zh-CN.md) | [English](./README.md)
 
-1. 兼容druid数据源开启安全过滤器后引起的脚本无法执行错误
-2. 增加Flyway模块化支持，实现了各个模块独立的版本迁移（注：模块较多时 flyway_模块名_schema_history 表会比较多）
+[Positioning](#1-positioning) · [Capabilities](#2-core-capabilities) ·
+[Dependency](#5-dependency) · [Quick Start](#6-quick-start) ·
+[Configuration](#7-configuration-reference) · [Versions](#9-version-lines-and-compatibility) ·
+[Build](#10-build-and-test) · [License](#12-license)
 
-### Maven
+</div>
 
-``` xml
+---
+
+> **Current Version**：`3.2.x.20260527-SNAPSHOT`<br>
+> **JDK Baseline**：`17`<br>
+> **Group ID**：`io.github.easy4j`<br>
+> **Artifact ID**：`flyway-plus-spring-boot-starter`<br>
+> **License**：Apache License 2.0<br>
+
+## 1. Positioning
+
+**flyway-plus-spring-boot-starter** is a Spring Boot starter that integrates **flyway-plus** for applications using flyway-plus. It provides auto-configuration, property binding, and ready-to-use beans so that applications can consume flyway-plus capabilities with minimal setup.
+
+| Dimension | Description |
+|---|---|
+| Type | Spring Boot Starter |
+| Consumers | Spring Boot applications using flyway-plus |
+| Core Capabilities | auto-configuration, property binding, ready-to-use beans for flyway-plus |
+| JDK | `17` |
+| Coordinates | `io.github.easy4j:flyway-plus-spring-boot-starter:3.2.x.20260527-SNAPSHOT` |
+| Config Prefix | `flyway.plus` |
+
+## 2. Core Capabilities
+
+| Capability | Status | Description |
+|---|:---:|---|
+| Auto-configuration | ✅ Stable | Registers flyway-plus beans automatically |
+| Property Binding | ✅ Stable | Binds `flyway.plus.*` to `FlywayModularizedMigrationProperties` |
+| `DataSource` bean | ✅ Stable | Auto-registered via FlywayModularizedAutoConfiguration |
+
+## 3. Requirements and Compatibility
+
+| Dependency | Minimum | Evidence |
+|---|---:|---|
+| JDK | `17` | `pom.xml` |
+| Spring Boot | `3.2.12` | `pom.xml` parent |
+| Maven | `3.6+` | Maven Enforcer |
+
+## 4. Auto-configuration
+
+The starter auto-configures the following beans:
+
+| Bean | Condition | Missing Behavior |
+|---|---|---|
+| `DataSource` | classpath + property | not created |
+| `FlywayMigrationProvider` | classpath + property | not created |
+| `StringOrNumberToMigrationVersionConverter` | classpath + property | not created |
+| `FlywayModularizedSchemaManagementProvider` | classpath + property | not created |
+| `FlywayModularizedMigrationInitializer` | classpath + property | not created |
+
+Auto-configuration registration:
+
+- `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` (Spring Boot 2.7+ / 3.x / 4.x)
+- `META-INF/spring.factories` (Spring Boot 2.x legacy)
+
+## 5. Dependency
+
+```xml
 <dependency>
-	<groupId>com.github.hiwepy</groupId>
-	<artifactId>flyway-plus-spring-boot-starter</artifactId>
-	<version>${project.version}</version>
+    <groupId>io.github.easy4j</groupId>
+    <artifactId>flyway-plus-spring-boot-starter</artifactId>
+    <version>3.2.x.20260527-SNAPSHOT</version>
 </dependency>
 ```
 
-### Simple
+No additional easy4j component dependencies.
 
-[https://github.com/vindell/spring-boot-starter-samples/tree/master/spring-boot-sample-flyway](https://github.com/vindell/spring-boot-starter-samples/tree/master/spring-boot-sample-flyway "spring-boot-sample-flyway")
+## 6. Quick Start
 
+### 6.1 Add dependency
+
+Add the dependency above to your `pom.xml`.
+
+### 6.2 Configure
+
+```yaml
+flyway.plus:
+  enabled: true
+```
+
+### 6.3 Use the bean
+
+```java
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+```
+
+Then inject the auto-configured bean in your code:
+
+```java
+@Autowired
+private DataSource flywayDatasource;
+```
+
+## 7. Configuration Reference
+
+### 7.1 Config Prefix
+
+`flyway.plus`
+
+### 7.2 Configuration Items
+
+| Property | Type | Default | Required | Description | Sensitive |
+|---|---|---|:---:|---|:---:|
+| `flyway.plus.enabled` | boolean | `true` | No | Enable the starter | No |
+<!-- additional properties below -->
+
+## 8. Version Lines and Compatibility
+
+| Branch | JDK | Spring Boot | Component Version | Status |
+|---|---:|---:|---|:---:|
+| `2.3.x` / `2.7.x` | `8+` | 2.3.x / 2.7.x | `1.0.x` | Maintenance |
+| `3.0.x` ~ `3.5.x` | `17` | 3.x | `2.0.x` | Maintenance |
+| `4.0.x` / `4.1.x` | `17+` | 4.x | `3.0.x` | Active |
+
+## 9. Build and Test
+
+```bash
+mvn clean verify
+mvn -pl flyway-plus-spring-boot-starter -am test
+```
+
+## 10. Troubleshooting
+
+| Symptom | Diagnosis | Resolution |
+|---|---|---|
+| Bean not created | Check auto-configuration report | Verify `flyway.plus.enabled=true` and classpath |
+| `ClassNotFoundException` | Missing dependency | Add the required module |
+| Version conflict | `mvn dependency:tree` | Use BOM for version alignment |
+
+## 11. Contribution
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Run `mvn clean verify` before submitting.
+4. Submit a pull request.
+
+## 12. License
+
+This project is licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
+---
+
+<div align="center">
+
+[Back to top](#readme-top) · [Issues](https://github.com/easy-4-java/flyway-plus-spring-boot-starter/issues) · [Repository](https://github.com/easy-4-java/flyway-plus-spring-boot-starter)
+
+</div>
