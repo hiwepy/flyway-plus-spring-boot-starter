@@ -34,7 +34,7 @@ import org.springframework.boot.convert.DurationUnit;
 
 /**
  * Flyway模块化配置：locations和table参数特别需要注意，每个模块不能相同
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
  */
 @Getter
 @Setter
