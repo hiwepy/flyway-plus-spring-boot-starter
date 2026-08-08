@@ -24,7 +24,7 @@ import org.flywaydb.spring.boot.ext.resolver.LocationModuleResolver;
 
 /**
  * 增加模块名称参数
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
  */
 public class FlywayFluentConfiguration extends FluentConfiguration {
 	
