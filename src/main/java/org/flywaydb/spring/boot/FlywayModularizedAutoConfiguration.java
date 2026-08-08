@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 /**
  * 扩展Flyway实现，解决使用Druid数据源时执行SQL权限问题（Druid安全机制导致）
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
  */
 @Configuration
 @ConditionalOnClass(Flyway.class)
