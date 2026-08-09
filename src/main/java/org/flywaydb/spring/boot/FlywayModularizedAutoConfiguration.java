@@ -37,13 +37,17 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * 扩展Flyway实现，解决使用Druid数据源时执行SQL权限问题（Druid安全机制导致）
+ * Extended Flyway auto-configuration for modularized database migrations. <p>Resolves the
+ * SQL-execution permission issues caused by the Druid security mechanism when a Druid
+ * data source is used, and runs each module's migrations before the main database
+ * migration.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 @Configuration
 @ConditionalOnClass(Flyway.class)
 @ConditionalOnProperty(prefix = "spring.flyway", name = "moduleable", havingValue = "true")
-/** 在主体数据库迁移之前完成各个模块的数据库迁移 */
 @AutoConfigureBefore(name = {
 	"org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration",
 	"org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration",
@@ -54,18 +58,32 @@ import java.util.stream.Collectors;
 	"org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration"
 })
 public class FlywayModularizedAutoConfiguration{
-	
+
+	/**
+	 * Builds the dedicated {@link DataSource} used by Flyway.
+	 * @param properties the data-source properties
+	 * @return the initialized Flyway data source
+	 */
 	@Bean
 	@FlywayDataSource
 	public DataSource flywayDatasource(DataSourceProperties properties) {
 		return properties.initializeDataSourceBuilder().build();
 	}
-	
+
+	/**
+	 * Registers the Flyway migration provider.
+	 * @return a new {@link FlywayMigrationProvider}
+	 */
 	@Bean
 	public FlywayMigrationProvider flywayMigration() {
 		return new FlywayMigrationProvider();
 	}
-	
+
+	/**
+	 * Registers a converter from {@link String} or {@link Number} to
+	 * {@link MigrationVersion}.
+	 * @return a new {@link StringOrNumberToMigrationVersionConverter}
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	@ConfigurationPropertiesBinding
@@ -73,11 +91,20 @@ public class FlywayModularizedAutoConfiguration{
 		return new StringOrNumberToMigrationVersionConverter();
 	}
 
+	/**
+	 * Registers a schema-management provider backed by the modularized Flyway instances.
+	 * @param flyways the modularized Flyway instances
+	 * @return a new {@link FlywayModularizedSchemaManagementProvider}
+	 */
 	@Bean
 	public FlywayModularizedSchemaManagementProvider flywayModularizedDdlModeProvider(@Qualifier("flyways") List<Flyway> flyways) {
 		return new FlywayModularizedSchemaManagementProvider(flyways);
 	}
-	
+
+	/**
+	 * Inner configuration that builds the list of modularized {@link Flyway} instances and
+	 * the migration initializer.
+	 */
 	@Configuration
 	@EnableConfigurationProperties({ DataSourceProperties.class, FlywayProperties.class, FlywayModularizedMigrationProperties.class })
 	/*@Import({ FlywayModularizedMigrationInitializerEntityManagerFactoryDependsOnPostProcessor.class,
@@ -102,12 +129,25 @@ public class FlywayModularizedAutoConfiguration{
 		
 		private final List<FlywayFluentConfiguration> configurations;
 
+		/**
+		 * Constructs the modularized Flyway configuration, resolving collaborators from the
+		 * Spring context via {@link ObjectProvider}.
+		 * @param properties the global Flyway properties
+		 * @param modularizedProperties the modularized migration properties
+		 * @param dataSourceProperties the data-source properties
+		 * @param resourceLoader the resource loader used to verify migration locations
+		 * @param dataSource the primary data-source provider
+		 * @param flywayDataSource the dedicated Flyway data-source provider
+		 * @param fluentConfigurationCustomizers the configuration customizers
+		 * @param callbacks the Flyway callbacks
+		 * @param configurations the Java-configured Fluent configurations
+		 */
 		public FlywayModularizedConfiguration(
 				FlywayProperties properties,
 				FlywayModularizedMigrationProperties modularizedProperties,
-				DataSourceProperties dataSourceProperties, 
+				DataSourceProperties dataSourceProperties,
 				ResourceLoader resourceLoader,
-				ObjectProvider<DataSource> dataSource, 
+				ObjectProvider<DataSource> dataSource,
 				@FlywayDataSource ObjectProvider<DataSource> flywayDataSource,
 				ObjectProvider<FlywayConfigurationCustomizer> fluentConfigurationCustomizers,
 				ObjectProvider<Callback> callbacks,
@@ -123,12 +163,17 @@ public class FlywayModularizedAutoConfiguration{
 			this.configurations = configurations.orderedStream().collect(Collectors.toList());
 		}
 		
+		/**
+		 * Builds the list of {@link Flyway} instances: one per configured module (both
+		 * property-based and Java-configured).
+		 * @return the list of Flyway instances
+		 */
 		@Bean("flyways")
 		public List<Flyway> flyways() {
-			
+
 			List<Flyway> flyways = new ArrayList<>();
-			
-			// 基于配置文件的多模块
+
+			// Property-based modules
 			if(!CollectionUtils.isEmpty(this.modularizedProperties.getModules())) {
 				
 				for (FlywayModularizedProperties properties : this.modularizedProperties.getModules()) {
@@ -147,7 +192,7 @@ public class FlywayModularizedAutoConfiguration{
 				
 			}
 			
-			// 基于Java配置对象的多模块
+			// Java-configuration-based modules
 			if(!CollectionUtils.isEmpty(this.configurations)) {
 				
 				for (FlywayFluentConfiguration configuration : this.configurations) {
@@ -187,7 +232,7 @@ public class FlywayModularizedAutoConfiguration{
 		}
 		
 		private DataSource configureDataSource(FluentConfiguration configuration) {
-			// 没有初始化Datasource,则使用默认的Datasource
+			// If no data source is configured, fall back to the default data source
 			if( null == configuration.getDataSource()) {
 				if (this.flywayDataSource != null) {
 					configuration.dataSource(this.flywayDataSource);
@@ -345,6 +390,12 @@ public class FlywayModularizedAutoConfiguration{
 			return location.replace("filesystem:", "file:");
 		}
 		
+		/**
+		 * Creates the modularized migration initializer that runs all module migrations.
+		 * @param flyways the modularized Flyway instances
+		 * @param migrationStrategy optional migration strategy
+		 * @return a new {@link FlywayModularizedMigrationInitializer}
+		 */
 		@Bean
 		public FlywayModularizedMigrationInitializer flywayModuleInitializer(@Qualifier("flyways") List<Flyway> flyways,
 				ObjectProvider<FlywayMigrationStrategy> migrationStrategy) {

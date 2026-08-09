@@ -18,9 +18,20 @@ package org.flywaydb.spring.boot.ext;
 
 import org.springframework.context.ApplicationEvent;
 
+/**
+ * Event published once a Flyway migration has completed. <p>The source of the event is the
+ * object that triggered the migration (e.g. the {@code FlywayMigrationProvider}).</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @SuppressWarnings("serial")
 public class FlywayMigratedEvent extends ApplicationEvent {
 
+	/**
+	 * Constructs a migration-completed event.
+	 * @param source the object on which the event initially occurred
+	 */
 	public FlywayMigratedEvent(Object source) {
 		super(source);
 	}

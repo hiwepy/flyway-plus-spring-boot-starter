@@ -34,10 +34,19 @@ public class FlywayModularizedSchemaManagementProvider implements SchemaManageme
 
 	private final Iterable<Flyway> flywayInstances;
 
+	/**
+	 * Constructs a provider backed by the given Flyway instances.
+	 * @param flywayInstances the Flyway instances to inspect
+	 */
 	public FlywayModularizedSchemaManagementProvider(Iterable<Flyway> flywayInstances) {
 		this.flywayInstances = flywayInstances;
 	}
 
+	/**
+	 * Returns whether the given data source is managed by any of the Flyway instances.
+	 * @param dataSource the data source to check
+	 * @return {@link SchemaManagement#MANAGED} if managed, otherwise {@link SchemaManagement#UNMANAGED}
+	 */
 	@Override
 	public SchemaManagement getSchemaManagement(DataSource dataSource) {
 		return StreamSupport.stream(this.flywayInstances.spliterator(), false)

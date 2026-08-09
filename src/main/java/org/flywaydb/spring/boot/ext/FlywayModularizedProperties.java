@@ -33,8 +33,11 @@ import org.springframework.boot.autoconfigure.flyway.FlywayProperties;
 import org.springframework.boot.convert.DurationUnit;
 
 /**
- * Flyway模块化配置：locations和table参数特别需要注意，每个模块不能相同
+ * Per-module Flyway configuration. <p>Note that the {@code locations} and {@code table}
+ * properties must be unique across modules.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 @Getter
 @Setter

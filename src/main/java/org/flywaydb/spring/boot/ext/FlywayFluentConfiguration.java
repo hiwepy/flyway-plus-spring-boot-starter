@@ -23,8 +23,12 @@ import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.flywaydb.spring.boot.ext.resolver.LocationModuleResolver;
 
 /**
- * 增加模块名称参数
+ * Extended {@link FluentConfiguration} that adds a module-name parameter. <p>The module name
+ * is substituted into the configured migration locations and schema-history table via the
+ * {@code {module}} placeholder.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public class FlywayFluentConfiguration extends FluentConfiguration {
 	
@@ -66,6 +70,12 @@ public class FlywayFluentConfiguration extends FluentConfiguration {
     	this.init(baselineDescription, baselineVersion);
     }
 
+	/**
+	 * Sets the migration locations, resolving the {@code {module}} placeholder against the
+	 * configured module name.
+	 * @param locations the migration locations
+	 * @return this configuration instance
+	 */
     @Override
     public FluentConfiguration locations(String... locations) {
 		String[] moduleLocations = new LocationModuleResolver(this.getModule())
@@ -73,7 +83,13 @@ public class FlywayFluentConfiguration extends FluentConfiguration {
 		this.locationAsStrings = Arrays.asList(moduleLocations);
     	return super.locations(moduleLocations);
     }
-    
+
+	/**
+	 * Initializes the configuration with the default module locations, table name and
+	 * baseline settings.
+	 * @param baselineDescription the baseline description
+	 * @param baselineVersion the baseline version
+	 */
     protected void init(String baselineDescription, String baselineVersion) {
     	this.locations(DEFAULT_FLYWAY_MODULE_PATH)
     	 	.table(DEFAULT_FLYWAY_MODULE_TABLE)
@@ -82,15 +98,27 @@ public class FlywayFluentConfiguration extends FluentConfiguration {
     	 	.baselineVersion(baselineVersion);
 	}
 
+	/**
+	 * Returns the name of the schema-history table.
+	 * @return the schema-history table name
+	 */
     @Override
     public String getTable() {
     	return super.getTable();
     }
-    
+
+	/**
+	 * Returns the module name used for location and table resolution.
+	 * @return the module name
+	 */
 	public String getModule() {
 		return module;
 	}
 
+	/**
+	 * Returns the resolved migration locations as strings.
+	 * @return the resolved migration locations
+	 */
 	public List<String> getLocationAsStrings() {
 		return locationAsStrings;
 	}

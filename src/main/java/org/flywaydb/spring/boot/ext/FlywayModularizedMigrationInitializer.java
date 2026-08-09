@@ -24,8 +24,11 @@ import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
 
 /**
- * TODO
+ * {@link InitializingBean} that triggers the migration of all modularized {@link Flyway}
+ * instances when its properties are set.
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public class FlywayModularizedMigrationInitializer implements InitializingBean, Ordered {
 
@@ -55,6 +58,11 @@ public class FlywayModularizedMigrationInitializer implements InitializingBean, 
 		this.migrationStrategy = migrationStrategy;
 	}
 
+	/**
+	 * Runs the migration for each Flyway instance, using the migration strategy if one is
+	 * provided.
+	 * @throws Exception if a migration fails
+	 */
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (this.migrationStrategy != null) {
@@ -69,11 +77,19 @@ public class FlywayModularizedMigrationInitializer implements InitializingBean, 
 		}
 	}
 
+	/**
+	 * Returns the order of this initializer.
+	 * @return the order
+	 */
 	@Override
 	public int getOrder() {
 		return this.order;
 	}
 
+	/**
+	 * Sets the order of this initializer.
+	 * @param order the order
+	 */
 	public void setOrder(int order) {
 		this.order = order;
 	}

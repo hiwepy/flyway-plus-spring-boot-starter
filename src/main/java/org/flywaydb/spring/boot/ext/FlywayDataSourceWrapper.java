@@ -24,10 +24,21 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+/**
+ * Simple delegating {@link DataSource} wrapper used by Flyway. <p>All calls are forwarded to
+ * the wrapped delegate data source.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class FlywayDataSourceWrapper implements DataSource {
 
 	private DataSource delegate;
-	
+
+	/**
+	 * Constructs a wrapper around the given data source.
+	 * @param org the data source to delegate to
+	 */
 	public FlywayDataSourceWrapper(DataSource org) {
 		this.delegate = org;
 	}

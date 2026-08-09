@@ -26,23 +26,41 @@ import org.springframework.jdbc.support.MetaDataAccessException;
 import org.springframework.util.StringUtils;
 
 /**
- * TODO
+ * Resolves the {@code {vendor}} placeholder in migration locations. <p>Each occurrence of
+ * {@code {vendor}} is replaced with the database vendor identifier detected from the data
+ * source.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public class LocationVendorResolver {
-	
+
 	private static final String VENDOR_PLACEHOLDER = "{vendor}";
 
 	private final DataSource dataSource;
 
+	/**
+	 * Constructs a resolver that detects the vendor from the given data source.
+	 * @param dataSource the data source used to detect the vendor
+	 */
 	public LocationVendorResolver(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
+	/**
+	 * Resolves the {@code {vendor}} placeholder in the given locations.
+	 * @param locations the locations to resolve
+	 * @return the resolved locations
+	 */
 	public String[] resolveLocations(Collection<String> locations) {
 		return resolveLocations(StringUtils.toStringArray(locations));
 	}
 
+	/**
+	 * Resolves the {@code {vendor}} placeholder in the given locations.
+	 * @param locations the locations to resolve
+	 * @return the resolved locations
+	 */
 	public String[] resolveLocations(String[] locations) {
 		if (usesVendorLocation(locations)) {
 			DatabaseDriver databaseDriver = getDatabaseDriver();
@@ -51,6 +69,12 @@ public class LocationVendorResolver {
 		return locations;
 	}
 
+	/**
+	 * Replaces the {@code {vendor}} placeholder in each location with the given driver's id.
+	 * @param locations the locations to resolve
+	 * @param databaseDriver the detected database driver
+	 * @return the resolved locations, or the originals if the driver is unknown
+	 */
 	private String[] replaceVendorLocations(String[] locations,
 			DatabaseDriver databaseDriver) {
 		if (databaseDriver == DatabaseDriver.UNKNOWN) {
@@ -62,6 +86,10 @@ public class LocationVendorResolver {
 				.toArray(String[]::new);
 	}
 
+	/**
+	 * Detects the {@link DatabaseDriver} from the data source's JDBC URL.
+	 * @return the detected database driver
+	 */
 	private DatabaseDriver getDatabaseDriver() {
 		try {
 			String url = JdbcUtils.extractDatabaseMetaData(this.dataSource, "getURL");
@@ -73,6 +101,11 @@ public class LocationVendorResolver {
 
 	}
 
+	/**
+	 * Returns whether any of the given locations contains the {@code {vendor}} placeholder.
+	 * @param locations the locations to inspect
+	 * @return {@code true} if the placeholder is present
+	 */
 	private boolean usesVendorLocation(String... locations) {
 		for (String location : locations) {
 			if (location.contains(VENDOR_PLACEHOLDER)) {
