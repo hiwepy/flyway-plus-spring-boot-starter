@@ -14,8 +14,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.flyway.*;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
@@ -42,7 +41,7 @@ import java.util.stream.Collectors;
  * data source is used, and runs each module's migrations before the main database
  * migration.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author Loong Wan (https://github.com/loong10k)
  * @since 1.0.0
  */
 @Configuration
@@ -268,7 +267,7 @@ public class FlywayModularizedAutoConfiguration{
 		}
 
 		private void configureProperties(FlywayModularizedProperties properties, FluentConfiguration configuration) {
-			PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+			PropertyMapper map = PropertyMapper.get();
 			String[] locations = new LocationVendorResolver(configuration.getDataSource())
 					.resolveLocations(properties.getLocations());
 			locations = new LocationModuleResolver(properties.getModule()).resolveLocations(locations);
@@ -280,7 +279,7 @@ public class FlywayModularizedAutoConfiguration{
 			String table = new TableModuleResolver(properties.getModule()).resolveTable(properties.getTable());
 			map.from(table).to(configuration::table);
 			// No method reference for compatibility with Flyway 5.x
-			map.from(properties.getTablespace()).whenNonNull().to((tablespace) -> configuration.tablespace(tablespace));
+			map.from(properties.getTablespace()).when(java.util.Objects::nonNull).to((tablespace) -> configuration.tablespace(tablespace));
 			map.from(properties.getBaselineDescription()).to(configuration::baselineDescription);
 			map.from(properties.getBaselineVersion()).to(configuration::baselineVersion);
 			map.from(properties.getInstalledBy()).to(configuration::installedBy);
@@ -296,7 +295,7 @@ public class FlywayModularizedAutoConfiguration{
 			map.from(properties.getTarget()).to(configuration::target);
 			map.from(properties.isBaselineOnMigrate()).to(configuration::baselineOnMigrate);
 			map.from(properties.isCleanDisabled()).to(configuration::cleanDisabled);
-			map.from(properties.isCleanOnValidationError()).to(configuration::cleanOnValidationError);
+			// cleanOnValidationError removed in Flyway 12
 			map.from(properties.isGroup()).to(configuration::group);
 			map.from(properties.getIgnoreMigrationPatterns()).to(configuration::ignoreMigrationPatterns);
 			map.from(properties.isMixed()).to(configuration::mixed);
@@ -305,21 +304,21 @@ public class FlywayModularizedAutoConfiguration{
 			map.from(properties.isSkipDefaultResolvers()).to(configuration::skipDefaultResolvers);
 			map.from(properties.isValidateOnMigrate()).to(configuration::validateOnMigrate);
 			// Pro properties
-			map.from(properties.getBatch()).whenNonNull().to(configuration::batch);
-			map.from(properties.getDryRunOutput()).whenNonNull().to(configuration::dryRunOutput);
-			map.from(properties.getErrorOverrides()).whenNonNull().to(configuration::errorOverrides);
-			//map.from(properties.getLicenseKey()).whenNonNull().to(configuration::licenseKey);
-			///map.from(properties.getOracleSqlplus()).whenNonNull().to(configuration::oracleSqlplus);
+			map.from(properties.getBatch()).when(java.util.Objects::nonNull).to(configuration::batch);
+			map.from(properties.getDryRunOutput()).when(java.util.Objects::nonNull).to(configuration::dryRunOutput);
+			map.from(properties.getErrorOverrides()).when(java.util.Objects::nonNull).to(configuration::errorOverrides);
+			//map.from(properties.getLicenseKey()).when(java.util.Objects::nonNull).to(configuration::licenseKey);
+			///map.from(properties.getOracleSqlplus()).when(java.util.Objects::nonNull).to(configuration::oracleSqlplus);
 			// No method reference for compatibility with Flyway 5.x
-			//map.from(properties.getOracleSqlplusWarn()).whenNonNull()
+			//map.from(properties.getOracleSqlplusWarn()).when(java.util.Objects::nonNull)
 			//		.to((oracleSqlplusWarn) -> configuration.oracleSqlplusWarn(oracleSqlplusWarn));
-			map.from(properties.getStream()).whenNonNull().to(configuration::stream);
-			//map.from(properties.getUndoSqlMigrationPrefix()).whenNonNull().to(configuration::undoSqlMigrationPrefix);
+			map.from(properties.getStream()).when(java.util.Objects::nonNull).to(configuration::stream);
+			//map.from(properties.getUndoSqlMigrationPrefix()).when(java.util.Objects::nonNull).to(configuration::undoSqlMigrationPrefix);
 		}
 
 		private void configureConfiguration(FlywayFluentConfiguration configuration) {
 			
-			PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+			PropertyMapper map = PropertyMapper.get();
 			String[] locations = new LocationVendorResolver(configuration.getDataSource())
 					.resolveLocations(configuration.getLocationAsStrings());
 			map.from(locations).to(configuration::locations);
@@ -329,7 +328,7 @@ public class FlywayModularizedAutoConfiguration{
 			String table = new TableModuleResolver(configuration.getModule()).resolveTable(configuration.getTable());
 			map.from(table).to(configuration::table);
 			// No method reference for compatibility with Flyway 5.x
-			map.from(properties.getTablespace()).whenNonNull().to((tablespace) -> configuration.tablespace(tablespace));
+			map.from(properties.getTablespace()).when(java.util.Objects::nonNull).to((tablespace) -> configuration.tablespace(tablespace));
 			map.from(properties.getInstalledBy()).to(configuration::installedBy);
 			map.from(properties.getPlaceholders()).to(configuration::placeholders);
 			map.from(properties.getPlaceholderPrefix()).to(configuration::placeholderPrefix);
@@ -341,7 +340,7 @@ public class FlywayModularizedAutoConfiguration{
 			map.from(properties.getRepeatableSqlMigrationPrefix()).to(configuration::repeatableSqlMigrationPrefix);
 			map.from(properties.getTarget()).to(configuration::target);
 			map.from(properties.isCleanDisabled()).to(configuration::cleanDisabled);
-			map.from(properties.isCleanOnValidationError()).to(configuration::cleanOnValidationError);
+			// cleanOnValidationError removed in Flyway 12
 			map.from(properties.isGroup()).to(configuration::group);
 			/*map.from(properties.isIgnoreMissingMigrations()).to(configuration::ignoreMissingMigrations);
 			map.from(properties.isIgnoreIgnoredMigrations()).to(configuration::ignoreIgnoredMigrations);
@@ -353,16 +352,16 @@ public class FlywayModularizedAutoConfiguration{
 			map.from(properties.isSkipDefaultResolvers()).to(configuration::skipDefaultResolvers);
 			map.from(properties.isValidateOnMigrate()).to(configuration::validateOnMigrate);
 			// Pro properties
-			map.from(properties.getBatch()).whenNonNull().to(configuration::batch);
-			map.from(properties.getDryRunOutput()).whenNonNull().to(configuration::dryRunOutput);
-			map.from(properties.getErrorOverrides()).whenNonNull().to(configuration::errorOverrides);
-			map.from(properties.getLicenseKey()).whenNonNull().to(configuration::licenseKey);
-			map.from(properties.getOracleSqlplus()).whenNonNull().to(configuration::oracleSqlplus);
-			// No method reference for compatibility with Flyway 5.x
-			map.from(properties.getOracleSqlplusWarn()).whenNonNull()
-					.to((oracleSqlplusWarn) -> configuration.oracleSqlplusWarn(oracleSqlplusWarn));
-			map.from(properties.getStream()).whenNonNull().to(configuration::stream);
-			map.from(properties.getUndoSqlMigrationPrefix()).whenNonNull().to(configuration::undoSqlMigrationPrefix);
+			map.from(properties.getBatch()).when(java.util.Objects::nonNull).to(configuration::batch);
+			map.from(properties.getDryRunOutput()).when(java.util.Objects::nonNull).to(configuration::dryRunOutput);
+			map.from(properties.getErrorOverrides()).when(java.util.Objects::nonNull).to(configuration::errorOverrides);
+			// Pro/Enterprise properties - not available in open-source Flyway
+				// map.from(properties.getLicenseKey()).when(java.util.Objects::nonNull).to(configuration::licenseKey);
+				// map.from(properties.getOracleSqlplus()).when(java.util.Objects::nonNull).to(configuration::oracleSqlplus);
+				// map.from(properties.getOracleSqlplusWarn()).when(java.util.Objects::nonNull)
+				// 		.to((oracleSqlplusWarn) -> configuration.oracleSqlplusWarn(oracleSqlplusWarn));
+				map.from(properties.getStream()).when(java.util.Objects::nonNull).to(configuration::stream);
+				// map.from(properties.getUndoSqlMigrationPrefix()).when(java.util.Objects::nonNull).to(configuration::undoSqlMigrationPrefix);
 			
 		}
 		

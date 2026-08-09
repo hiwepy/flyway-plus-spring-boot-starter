@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2018, hiwepy (https://github.com/hiwepy).
+ * Copyright 2012-2019 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.flywaydb.spring.boot.ext;
 
@@ -28,50 +28,36 @@ import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-// FlywayProperties is now a local class in this package
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.convert.DurationUnit;
 
 /**
- * Per-module Flyway configuration. <p>Note that the {@code locations} and {@code table}
- * properties must be unique across modules.</p>
+ * Local replacement for the Flyway properties removed from Spring Boot 4.1 autoconfigure.
+ * Contains the global Flyway configuration properties bound to {@code spring.flyway.*}.
  *
- * @author Loong Wan (https://github.com/loong10k)
+ * @author [@Loong Wan](https://github.com/loong10k)
  * @since 1.0.0
  */
 @Getter
 @Setter
-@ToString
-public class FlywayModularizedProperties {
-	
-	private static final String DEFAULT_FLYWAY_MODULE_PATH = "classpath:db/migration/{module}/{vendor}";
-	private static final String DEFAULT_FLYWAY_MODULE_TABLE = "flyway_{module}_schema_history";
-	
-	/**
-     * The module of Sql migrations. (default: module)
-     */
-	private String module = "module";
+@ConfigurationProperties(prefix = "spring.flyway")
+public class FlywayProperties {
 
 	/**
-	 * Whether to enable flyway module supports.
+	 * Whether to enable flyway.
 	 */
 	private boolean enabled = true;
 
-    /**
+	/**
 	 * Whether to check that migration scripts location exists.
 	 */
 	private boolean checkLocation = true;
 
 	/**
-	 * Whether to fail if a location of migration scripts doesn't exist.
-	 */
-	private boolean failOnMissingLocations;
-
-	/**
 	 * Locations of migrations scripts. Can contain the special "{vendor}" placeholder to
 	 * use vendor-specific locations.
 	 */
-	private List<String> locations = new ArrayList<>(Collections.singletonList(DEFAULT_FLYWAY_MODULE_PATH));
+	private List<String> locations = new ArrayList<>(Collections.singletonList("classpath:db/migration"));
 
 	/**
 	 * Encoding of SQL migrations.
@@ -109,7 +95,7 @@ public class FlywayModularizedProperties {
 	/**
 	 * Name of the schema history table that will be used by Flyway.
 	 */
-	private String table = DEFAULT_FLYWAY_MODULE_TABLE;
+	private String table = "flyway_schema_history";
 
 	/**
 	 * Tablespace in which the schema history table is created. Ignored when using a
@@ -121,7 +107,7 @@ public class FlywayModularizedProperties {
 	/**
 	 * Description to tag an existing schema with when applying a baseline.
 	 */
-	private String baselineDescription = "<< Flyway Modularized Baseline >>";
+	private String baselineDescription = "<< Flyway Baseline >>";
 
 	/**
 	 * Version to tag an existing schema with when executing baseline.
@@ -147,11 +133,6 @@ public class FlywayModularizedProperties {
 	 * Suffix of placeholders in migration scripts.
 	 */
 	private String placeholderSuffix = "}";
-
-	/**
-	 * Separator of default placeholders.
-	 */
-	private String placeholderSeparator = ":";
 
 	/**
 	 * Perform placeholder replacement in migration scripts.
@@ -184,33 +165,6 @@ public class FlywayModularizedProperties {
 	private String target = "latest";
 
 	/**
-	 * Login user of the database to migrate.
-	 */
-	private String user;
-
-	/**
-	 * Login password of the database to migrate.
-	 */
-	private String password;
-
-	/**
-	 * Fully qualified name of the JDBC driver. Auto-detected based on the URL by default.
-	 */
-	private String driverClassName;
-
-	/**
-	 * JDBC url of the database to migrate. If not set, the primary configured data source
-	 * is used.
-	 */
-	private String url;
-
-	/**
-	 * SQL statements to execute to initialize a connection immediately after obtaining
-	 * it.
-	 */
-	private List<String> initSqls = new ArrayList<>();
-
-	/**
 	 * Whether to automatically call baseline when migrating a non-empty schema.
 	 */
 	private boolean baselineOnMigrate;
@@ -218,7 +172,7 @@ public class FlywayModularizedProperties {
 	/**
 	 * Whether to disable cleaning of the database.
 	 */
-	private boolean cleanDisabled = true;
+	private boolean cleanDisabled;
 
 	/**
 	 * Whether to automatically call clean when a validation error occurs.
@@ -253,35 +207,9 @@ public class FlywayModularizedProperties {
 	private boolean skipDefaultResolvers;
 
 	/**
-	 * Whether to validate migrations and callbacks whose scripts do not obey the correct
-	 * naming convention.
-	 */
-	private boolean validateMigrationNaming = false;
-
-	/**
 	 * Whether to automatically call validate when performing a migration.
 	 */
 	private boolean validateOnMigrate = true;
-
-	/**
-	 * Prefix of placeholders in migration scripts.
-	 */
-	private String scriptPlaceholderPrefix = "FP__";
-
-	/**
-	 * Suffix of placeholders in migration scripts.
-	 */
-	private String scriptPlaceholderSuffix = "__";
-
-	/**
-	 * Whether Flyway should execute SQL within a transaction.
-	 */
-	private boolean executeInTransaction = true;
-
-	/**
-	 * Loggers Flyway should use.
-	 */
-	private String[] loggers = { "slf4j" };
 
 	/**
 	 * Whether to batch SQL statements when executing them. Requires Flyway Teams.
@@ -306,47 +234,75 @@ public class FlywayModularizedProperties {
 	private Boolean stream;
 
 	/**
-	 * Properties to pass to the JDBC driver. Requires Flyway Teams.
+	 * The license key to use to unlock Flyway Teams or Enterprise features.
 	 */
-	private Map<String, String> jdbcProperties = new HashMap<>();
+	private String licenseKey;
 
 	/**
-	 * Path of the Kerberos config file. Requires Flyway Teams.
+	 * Whether to enable Oracle SQL*Plus commands.
 	 */
-	private String kerberosConfigFile;
+	private Boolean oracleSqlplus;
 
 	/**
-	 * Whether Flyway should output a table with the results of queries when executing
-	 * migrations. Requires Flyway Teams.
+	 * Whether to issue a warning rather than an error when a SQL*Plus command is
+	 * encountered.
 	 */
-	private Boolean outputQueryResults;
+	private Boolean oracleSqlplusWarn;
 
 	/**
-	 * Whether Flyway should skip executing the contents of the migrations and only update
-	 * the schema history table. Requires Flyway teams.
+	 * File name prefix for undo SQL migrations. Requires Flyway Teams.
 	 */
-	private Boolean skipExecutingMigrations;
+	private String undoSqlMigrationPrefix;
 
 	/**
 	 * Ignore migrations that match this comma-separated list of patterns when validating
-	 * migrations. Requires Flyway Teams.
+	 * migrations.
 	 */
 	private String[] ignoreMigrationPatterns;
 
-	/**
-	 * Whether to attempt to automatically detect SQL migration file encoding. Requires
-	 * Flyway Teams.
-	 */
-	private Boolean detectEncoding;
+	private final Oracle oracle = new Oracle();
 
-	private final FlywayProperties.Oracle oracle = new FlywayProperties.Oracle();
+	private final Postgresql postgresql = new Postgresql();
 
-	private final FlywayProperties.Postgresql postgresql = new FlywayProperties.Postgresql();
+	private final Sqlserver sqlserver = new Sqlserver();
 
-	private final FlywayProperties.Sqlserver sqlserver = new FlywayProperties.Sqlserver();
+	@Getter
+	@Setter
+	public static class Oracle {
 
-	public boolean isCreateDataSource() {
-		return this.url != null || this.user != null;
+		/**
+		 * Whether to enable Flyway's Oracle SQL*Plus support.
+		 */
+		private Boolean sqlplus;
+
+		/**
+		 * Whether Flyway should issue a warning rather than an error when SQL*Plus
+		 * commands are encountered.
+		 */
+		private Boolean sqlplusWarn;
+
 	}
-	
+
+	@Getter
+	@Setter
+	public static class Postgresql {
+
+		/**
+		 * Whether to enable transactional locks for Flyway PostgreSQL support.
+		 */
+		private Boolean transactionalLock;
+
+	}
+
+	@Getter
+	@Setter
+	public static class Sqlserver {
+
+		/**
+		 * Whether to enable Flyway's SQL Server transactional locks support.
+		 */
+		private Boolean transactionalLock;
+
+	}
+
 }

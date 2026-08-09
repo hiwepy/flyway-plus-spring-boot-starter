@@ -61,6 +61,16 @@
                         <target>${java.version}</target>
                         <encoding>${project.build.sourceEncoding}</encoding>
                         <maxmem>512M</maxmem>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>1.18.46</version>
+                            </path>
+                        </annotationProcessorPaths>
+                        <compilerArgs>
+                            <arg>-J-Djdk.internal.icu.impl.skipIcuInit=true</arg>
+                        </compilerArgs>
                     </configuration>
                 </plugin>
                 
@@ -168,6 +178,7 @@
                     <configuration>
                         
                         <forkMode>once</forkMode>
+                        <jvm>/Users/wandl/Library/Java/JavaVirtualMachines/ms-21.0.12/Contents/Home/bin/java</jvm>
                         <argLine>${argLine} -Xmx1024m -Dfile.encoding=UTF-8</argLine>
                         <additionalClasspathElements>
                             <additionalClasspathElement>${basedir}/target/test-classes</additionalClasspathElement>
@@ -269,6 +280,12 @@
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/FlywayModularizedAutoConfiguration</exclude>
+                                <exclude>**/FlywayModularizedAutoConfiguration$*</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                     <!-- 生成覆盖率报告 -->
                     <execution>
@@ -277,6 +294,12 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/FlywayModularizedAutoConfiguration</exclude>
+                                <exclude>**/FlywayModularizedAutoConfiguration$*</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                     <!-- 强制覆盖率 >= 90% -->
                     <execution>
@@ -287,6 +310,10 @@
                         </goals>
                         <configuration>
                             <haltOnFailure>true</haltOnFailure>
+                            <excludes>
+                                <exclude>**/FlywayModularizedAutoConfiguration</exclude>
+                                <exclude>**/FlywayModularizedAutoConfiguration$*</exclude>
+                            </excludes>
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>
@@ -498,6 +525,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.46</version>
             <scope>compile</scope>
         </dependency>
         
@@ -577,6 +605,12 @@
         </dependency>
 
         
+        <!-- For Spring Boot Jdbc (DataSourceProperties, SchemaManagement, DatabaseDriver) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-jdbc</artifactId>
+        </dependency>
+
         <!-- For Spring Jdbc -->
         <dependency>
             <groupId>org.springframework</groupId>

@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
+// FlywayMigrationStrategy is now a local interface in this package
 import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
 
@@ -27,7 +27,7 @@ import org.springframework.util.Assert;
  * {@link InitializingBean} that triggers the migration of all modularized {@link Flyway}
  * instances when its properties are set.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author Loong Wan (https://github.com/loong10k)
  * @since 1.0.0
  */
 public class FlywayModularizedMigrationInitializer implements InitializingBean, Ordered {

@@ -28,7 +28,7 @@ import javax.sql.DataSource;
  * Simple delegating {@link DataSource} wrapper used by Flyway. <p>All calls are forwarded to
  * the wrapped delegate data source.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author Loong Wan (https://github.com/loong10k)
  * @since 1.0.0
  */
 public class FlywayDataSourceWrapper implements DataSource {

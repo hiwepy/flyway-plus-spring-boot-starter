@@ -3,7 +3,7 @@ package org.flywaydb.spring.boot.ext;
 import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
+// FlywayMigrationStrategy is now a local interface in this package
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 
@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationEventPublisherAware;
  * Flyway migration strategy that runs the migration and publishes a
  * {@link FlywayMigratedEvent} on completion.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author Loong Wan (https://github.com/loong10k)
  * @since 1.0.0
  */
 public class FlywayMigrationProvider implements FlywayMigrationStrategy, ApplicationEventPublisherAware {
