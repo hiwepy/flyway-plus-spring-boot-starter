@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  * data source is used, and runs each module's migrations before the main database
  * migration.</p>
  *
- * @author Loong Wan (https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @Configuration

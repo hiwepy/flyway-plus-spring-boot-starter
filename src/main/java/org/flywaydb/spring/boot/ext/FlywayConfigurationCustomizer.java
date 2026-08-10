@@ -21,7 +21,7 @@ import org.flywaydb.core.api.configuration.FluentConfiguration;
  * Callback interface that can be implemented by beans wishing to customize the Flyway
  * {@link FluentConfiguration} while keeping its default auto-configuration.
  *
- * @author Loong Wan (https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @FunctionalInterface

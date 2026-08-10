@@ -27,7 +27,7 @@ import org.springframework.util.Assert;
  * {@link InitializingBean} that triggers the migration of all modularized {@link Flyway}
  * instances when its properties are set.
  *
- * @author Loong Wan (https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class FlywayModularizedMigrationInitializer implements InitializingBean, Ordered {

@@ -30,7 +30,7 @@ import org.springframework.util.StringUtils;
  * {@code {vendor}} is replaced with the database vendor identifier detected from the data
  * source.</p>
  *
- * @author Loong Wan (https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class LocationVendorResolver {

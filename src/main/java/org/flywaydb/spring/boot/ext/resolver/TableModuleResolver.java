@@ -19,7 +19,7 @@ package org.flywaydb.spring.boot.ext.resolver;
  * Resolves the {@code {module}} placeholder in the schema-history table name. <p>Each
  * occurrence of {@code {module}} is replaced with the configured module name.</p>
  *
- * @author Loong Wan (https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class TableModuleResolver {

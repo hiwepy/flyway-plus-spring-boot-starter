@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationEventPublisherAware;
  * Flyway migration strategy that runs the migration and publishes a
  * {@link FlywayMigratedEvent} on completion.
  *
- * @author Loong Wan (https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class FlywayMigrationProvider implements FlywayMigrationStrategy, ApplicationEventPublisherAware {

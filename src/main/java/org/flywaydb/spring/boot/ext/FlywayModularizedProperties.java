@@ -36,7 +36,7 @@ import org.springframework.boot.convert.DurationUnit;
  * Per-module Flyway configuration. <p>Note that the {@code locations} and {@code table}
  * properties must be unique across modules.</p>
  *
- * @author Loong Wan (https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @Getter

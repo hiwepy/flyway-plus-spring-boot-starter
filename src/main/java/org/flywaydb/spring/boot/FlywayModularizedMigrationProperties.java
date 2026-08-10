@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * {@code spring.flyway} prefix and exposes the list of migration modules and the master
  * switch that enables modularized migrations.</p>
  *
- * @author Loong Wan (https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @ConfigurationProperties(FlywayModularizedMigrationProperties.PREFIX)

@@ -22,7 +22,7 @@ import org.springframework.context.ApplicationEvent;
  * Event published once a Flyway migration has completed. <p>The source of the event is the
  * object that triggered the migration (e.g. the {@code FlywayMigrationProvider}).</p>
  *
- * @author Loong Wan (https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @SuppressWarnings("serial")

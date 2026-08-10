@@ -35,7 +35,7 @@ import org.springframework.boot.convert.DurationUnit;
  * Local replacement for the Flyway properties removed from Spring Boot 4.1 autoconfigure.
  * Contains the global Flyway configuration properties bound to {@code spring.flyway.*}.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @Getter

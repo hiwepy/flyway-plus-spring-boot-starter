@@ -27,7 +27,7 @@ import org.flywaydb.spring.boot.ext.resolver.LocationModuleResolver;
  * is substituted into the configured migration locations and schema-history table via the
  * {@code {module}} placeholder.</p>
  *
- * @author Loong Wan (https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class FlywayFluentConfiguration extends FluentConfiguration {
