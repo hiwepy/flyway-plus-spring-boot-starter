@@ -32,6 +32,7 @@ import java.io.Serializable;
  * class to compare filenames.
  *
  * @since 1.3
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  */
 public enum IOCase implements Serializable {
 

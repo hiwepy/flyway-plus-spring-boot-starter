@@ -29,6 +29,7 @@ import org.springframework.boot.jdbc.SchemaManagementProvider;
  * looking at available {@link Flyway} instances.
  *
  * @author Stephane Nicoll
+ * @since 1.0.0
  */
 public class FlywayModularizedSchemaManagementProvider implements SchemaManagementProvider {
 
