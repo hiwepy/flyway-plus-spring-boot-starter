@@ -24,6 +24,11 @@ import org.flywaydb.core.Flyway;
  * @since 1.0.0
  */
 @FunctionalInterface
+/**
+ * <p>Auto-configuration for FlywayMigrationStrategy.</p>
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public interface FlywayMigrationStrategy {
 
 	/**

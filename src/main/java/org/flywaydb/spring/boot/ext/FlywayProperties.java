@@ -41,6 +41,11 @@ import org.springframework.boot.convert.DurationUnit;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "spring.flyway")
+/**
+ * <p>Auto-configuration for FlywayProperties.</p>
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public class FlywayProperties {
 
 	/**
@@ -268,6 +273,11 @@ public class FlywayProperties {
 
 	@Getter
 	@Setter
+	/**
+	 * <p>Auto-configuration for Oracle.</p>
+	 * @author <a href="https://github.com/loong10k">Loong Wan</a>
+	 * @since 1.0.0
+	 */
 	public static class Oracle {
 
 		/**
@@ -285,6 +295,11 @@ public class FlywayProperties {
 
 	@Getter
 	@Setter
+	/**
+	 * <p>Auto-configuration for Postgresql.</p>
+	 * @author <a href="https://github.com/loong10k">Loong Wan</a>
+	 * @since 1.0.0
+	 */
 	public static class Postgresql {
 
 		/**
@@ -296,6 +311,11 @@ public class FlywayProperties {
 
 	@Getter
 	@Setter
+	/**
+	 * <p>Auto-configuration for Sqlserver.</p>
+	 * @author <a href="https://github.com/loong10k">Loong Wan</a>
+	 * @since 1.0.0
+	 */
 	public static class Sqlserver {
 
 		/**

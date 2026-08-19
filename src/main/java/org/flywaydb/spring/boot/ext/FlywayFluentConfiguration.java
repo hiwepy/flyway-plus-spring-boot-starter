@@ -77,6 +77,11 @@ public class FlywayFluentConfiguration extends FluentConfiguration {
 	 * @return this configuration instance
 	 */
     @Override
+    /**
+     * <p>Locations.</p>
+     * @param locations
+     * @return the result
+     */
     public FluentConfiguration locations(String... locations) {
 		String[] moduleLocations = new LocationModuleResolver(this.getModule())
 				.resolveLocations(locations);
@@ -103,6 +108,7 @@ public class FlywayFluentConfiguration extends FluentConfiguration {
 	 * @return the schema-history table name
 	 */
     @Override
+    /** @return return the table. */
     public String getTable() {
     	return super.getTable();
     }

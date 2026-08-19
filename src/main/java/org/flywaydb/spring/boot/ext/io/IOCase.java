@@ -246,6 +246,10 @@ public enum IOCase implements Serializable {
      * @return a string describing the sensitivity
      */
     @Override
+    /**
+     * <p>To string.</p>
+     * @return the result
+     */
     public String toString() {
         return name;
     }

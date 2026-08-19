@@ -15,6 +15,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 1.0.0
  */
 @ConfigurationProperties(FlywayModularizedMigrationProperties.PREFIX)
+/**
+ * <p>Auto-configuration for FlywayModularizedMigrationProperties.</p>
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public class FlywayModularizedMigrationProperties {
 
 	public static final String PREFIX = "spring.flyway";

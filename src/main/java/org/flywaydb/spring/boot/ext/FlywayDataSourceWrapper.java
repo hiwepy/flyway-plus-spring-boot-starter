@@ -44,46 +44,59 @@ public class FlywayDataSourceWrapper implements DataSource {
 	}
 	
 	@Override
+	/** @return return the log writer. */
 	public PrintWriter getLogWriter() throws SQLException {
 		return delegate.getLogWriter();
 	}
 
 	@Override
+	/** @param out set the log writer. */
 	public void setLogWriter(PrintWriter out) throws SQLException {
 		delegate.setLogWriter(out);
 	}
 
 	@Override
+	/** @param seconds set the login timeout. */
 	public void setLoginTimeout(int seconds) throws SQLException {
 		delegate.setLoginTimeout(seconds);
 	}
 
 	@Override
+	/** @return return the login timeout. */
 	public int getLoginTimeout() throws SQLException {
 		return delegate.getLoginTimeout();
 	}
 
 	@Override
+	/** @return return the parent logger. */
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
 		return delegate.getParentLogger();
 	}
 
 	@Override
+	/**
+	 * <p>Unwrap.</p>
+	 * @param iface
+	 * @return the result
+	 */
 	public <T> T unwrap(Class<T> iface) throws SQLException {
 		return delegate.unwrap(iface);
 	}
 
 	@Override
+	/** @return return whether wrapper for is enabled. */
 	public boolean isWrapperFor(Class<?> iface) throws SQLException {
 		return delegate.isWrapperFor(iface);
 	}
 
 	@Override
+	/** @return return the connection. */
 	public Connection getConnection() throws SQLException {
 		return delegate.getConnection();
 	}
 
 	@Override
+	/** @return return the connection. */
 	public Connection getConnection(String username, String password) throws SQLException {
 		return delegate.getConnection(username, password);
 	}

@@ -26,6 +26,11 @@ import org.springframework.context.ApplicationEvent;
  * @since 1.0.0
  */
 @SuppressWarnings("serial")
+/**
+ * <p>Auto-configuration for FlywayMigratedEvent.</p>
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public class FlywayMigratedEvent extends ApplicationEvent {
 
 	/**

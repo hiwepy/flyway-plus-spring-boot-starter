@@ -56,6 +56,11 @@ import java.util.stream.Collectors;
 	"com.zaxxer.hikari.spring.boot.HikaricpAutoConfiguration",
 	"org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration"
 })
+/**
+ * <p>Auto-configuration for FlywayModularizedAutoConfiguration.</p>
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public class FlywayModularizedAutoConfiguration{
 
 	/**
@@ -65,6 +70,11 @@ public class FlywayModularizedAutoConfiguration{
 	 */
 	@Bean
 	@FlywayDataSource
+	/**
+	 * <p>Flyway datasource.</p>
+	 * @param properties
+	 * @return the result
+	 */
 	public DataSource flywayDatasource(DataSourceProperties properties) {
 		return properties.initializeDataSourceBuilder().build();
 	}
@@ -74,6 +84,10 @@ public class FlywayModularizedAutoConfiguration{
 	 * @return a new {@link FlywayMigrationProvider}
 	 */
 	@Bean
+	/**
+	 * <p>Flyway migration.</p>
+	 * @return the result
+	 */
 	public FlywayMigrationProvider flywayMigration() {
 		return new FlywayMigrationProvider();
 	}
@@ -86,6 +100,10 @@ public class FlywayModularizedAutoConfiguration{
 	@Bean
 	@ConditionalOnMissingBean
 	@ConfigurationPropertiesBinding
+	/**
+	 * <p>String or number migration version converter.</p>
+	 * @return the result
+	 */
 	public StringOrNumberToMigrationVersionConverter stringOrNumberMigrationVersionConverter() {
 		return new StringOrNumberToMigrationVersionConverter();
 	}
@@ -96,6 +114,10 @@ public class FlywayModularizedAutoConfiguration{
 	 * @return a new {@link FlywayModularizedSchemaManagementProvider}
 	 */
 	@Bean
+	/**
+	 * <p>Flyway modularized ddl mode provider.</p>
+	 * @return the result
+	 */
 	public FlywayModularizedSchemaManagementProvider flywayModularizedDdlModeProvider(@Qualifier("flyways") List<Flyway> flyways) {
 		return new FlywayModularizedSchemaManagementProvider(flyways);
 	}
@@ -168,6 +190,10 @@ public class FlywayModularizedAutoConfiguration{
 		 * @return the list of Flyway instances
 		 */
 		@Bean("flyways")
+		/**
+		 * <p>Flyways.</p>
+		 * @return the result
+		 */
 		public List<Flyway> flyways() {
 
 			List<Flyway> flyways = new ArrayList<>();
@@ -212,6 +238,12 @@ public class FlywayModularizedAutoConfiguration{
 			return flyways;
 		}
 		
+		/**
+		 * <p>Configure data source.</p>
+		 * @param properties
+		 * @param configuration
+		 * @return the result
+		 */
 		private DataSource configureDataSource(FlywayModularizedProperties properties, FluentConfiguration configuration) {
 			if (properties.isCreateDataSource()) {
 				String url = getProperty(properties::getUrl, this.dataSourceProperties::getUrl);
@@ -230,6 +262,11 @@ public class FlywayModularizedAutoConfiguration{
 			return configuration.getDataSource();
 		}
 		
+		/**
+		 * <p>Configure data source.</p>
+		 * @param configuration
+		 * @return the result
+		 */
 		private DataSource configureDataSource(FluentConfiguration configuration) {
 			// If no data source is configured, fall back to the default data source
 			if( null == configuration.getDataSource()) {
@@ -242,6 +279,11 @@ public class FlywayModularizedAutoConfiguration{
 			return configuration.getDataSource();
 		}
 			
+		/**
+		 * <p>Check location exists.</p>
+		 * @param properties
+		 * @param dataSource
+		 */
 		private void checkLocationExists(FlywayModularizedProperties properties, DataSource dataSource) {
 			if (properties.isCheckLocation()) {
 				String[] locations = new LocationVendorResolver(dataSource)
@@ -255,6 +297,10 @@ public class FlywayModularizedAutoConfiguration{
 			}
 		}
 		
+		/**
+		 * <p>Check location exists.</p>
+		 * @param configuration
+		 */
 		private void checkLocationExists(FlywayFluentConfiguration configuration) {
 			String[] locations = new LocationVendorResolver(configuration.getDataSource())
 					.resolveLocations(configuration.getLocationAsStrings());
@@ -266,6 +312,11 @@ public class FlywayModularizedAutoConfiguration{
 					+ " (please add migrations or check your Flyway configuration)");
 		}
 
+		/**
+		 * <p>Configure properties.</p>
+		 * @param properties
+		 * @param configuration
+		 */
 		private void configureProperties(FlywayModularizedProperties properties, FluentConfiguration configuration) {
 			PropertyMapper map = PropertyMapper.get();
 			String[] locations = new LocationVendorResolver(configuration.getDataSource())
@@ -316,6 +367,10 @@ public class FlywayModularizedAutoConfiguration{
 			//map.from(properties.getUndoSqlMigrationPrefix()).when(java.util.Objects::nonNull).to(configuration::undoSqlMigrationPrefix);
 		}
 
+		/**
+		 * <p>Configure configuration.</p>
+		 * @param configuration
+		 */
 		private void configureConfiguration(FlywayFluentConfiguration configuration) {
 			
 			PropertyMapper map = PropertyMapper.get();
@@ -365,17 +420,28 @@ public class FlywayModularizedAutoConfiguration{
 			
 		}
 		
+		/**
+		 * <p>Configure callbacks.</p>
+		 * @param configuration
+		 * @param callbacks
+		 */
 		private void configureCallbacks(FluentConfiguration configuration, List<Callback> callbacks) {
 			if (!callbacks.isEmpty()) {
 				configuration.callbacks(callbacks.toArray(new Callback[0]));
 			}
 		}
 		
+		/** @return return the property. */
 		private String getProperty(Supplier<String> property, Supplier<String> defaultValue) {
 			String value = property.get();
 			return (value != null) ? value : defaultValue.get();
 		}
 
+		/**
+		 * <p>Has at least one location.</p>
+		 * @param locations
+		 * @return the result
+		 */
 		private boolean hasAtLeastOneLocation(String... locations) {
 			for (String location : locations) {
 				if (this.resourceLoader.getResource(normalizePrefix(location)).exists()) {
@@ -385,6 +451,11 @@ public class FlywayModularizedAutoConfiguration{
 			return false;
 		}
 
+		/**
+		 * <p>Normalize prefix.</p>
+		 * @param location
+		 * @return the result
+		 */
 		private String normalizePrefix(String location) {
 			return location.replace("filesystem:", "file:");
 		}
@@ -396,6 +467,10 @@ public class FlywayModularizedAutoConfiguration{
 		 * @return a new {@link FlywayModularizedMigrationInitializer}
 		 */
 		@Bean
+		/**
+		 * <p>Flyway module initializer.</p>
+		 * @return the result
+		 */
 		public FlywayModularizedMigrationInitializer flywayModuleInitializer(@Qualifier("flyways") List<Flyway> flyways,
 				ObjectProvider<FlywayMigrationStrategy> migrationStrategy) {
 			return new FlywayModularizedMigrationInitializer(flyways, migrationStrategy.getIfAvailable());
@@ -410,6 +485,11 @@ public class FlywayModularizedAutoConfiguration{
 	 *//*
 	@ConditionalOnClass(LocalContainerEntityManagerFactoryBean.class)
 	@ConditionalOnBean(AbstractEntityManagerFactoryBean.class)
+	/**
+	 * <p>Auto-configuration for FlywayModularizedMigrationInitializerEntityManagerFactoryDependsOnPostProcessor.</p>
+	 * @author <a href="https://github.com/loong10k">Loong Wan</a>
+	 * @since 1.0.0
+	 */
 	static class FlywayModularizedMigrationInitializerEntityManagerFactoryDependsOnPostProcessor
 			extends EntityManagerFactoryDependsOnPostProcessor {
 
@@ -425,6 +505,11 @@ public class FlywayModularizedAutoConfiguration{
 	 *//*
 	@ConditionalOnClass(JdbcOperations.class)
 	@ConditionalOnBean(JdbcOperations.class)
+	/**
+	 * <p>Auto-configuration for FlywayModularizedMigrationInitializerJdbcOperationsDependsOnPostProcessor.</p>
+	 * @author <a href="https://github.com/loong10k">Loong Wan</a>
+	 * @since 1.0.0
+	 */
 	static class FlywayModularizedMigrationInitializerJdbcOperationsDependsOnPostProcessor
 			extends JdbcOperationsDependsOnPostProcessor {
 
@@ -440,6 +525,11 @@ public class FlywayModularizedAutoConfiguration{
 	 *//*
 	@ConditionalOnClass(NamedParameterJdbcOperations.class)
 	@ConditionalOnBean(NamedParameterJdbcOperations.class)
+	/**
+	 * <p>Auto-configuration for FlywayModularizedMigrationInitializerNamedParameterJdbcOperationsDependsOnPostProcessor.</p>
+	 * @author <a href="https://github.com/loong10k">Loong Wan</a>
+	 * @since 1.0.0
+	 */
 	static class FlywayModularizedMigrationInitializerNamedParameterJdbcOperationsDependsOnPostProcessor
 			extends NamedParameterJdbcOperationsDependsOnPostProcessor {
 
@@ -455,6 +545,11 @@ public class FlywayModularizedAutoConfiguration{
 	 *//*
 	@ConditionalOnClass(LocalContainerEntityManagerFactoryBean.class)
 	@ConditionalOnBean(AbstractEntityManagerFactoryBean.class)
+	/**
+	 * <p>Auto-configuration for FlywayModularizedEntityManagerFactoryDependsOnPostProcessor.</p>
+	 * @author <a href="https://github.com/loong10k">Loong Wan</a>
+	 * @since 1.0.0
+	 */
 	static class FlywayModularizedEntityManagerFactoryDependsOnPostProcessor extends EntityManagerFactoryDependsOnPostProcessor {
 
 		FlywayModularizedEntityManagerFactoryDependsOnPostProcessor() {
@@ -469,6 +564,11 @@ public class FlywayModularizedAutoConfiguration{
 	 *//*
 	@ConditionalOnClass(JdbcOperations.class)
 	@ConditionalOnBean(JdbcOperations.class)
+	/**
+	 * <p>Auto-configuration for FlywayModularizedJdbcOperationsDependsOnPostProcessor.</p>
+	 * @author <a href="https://github.com/loong10k">Loong Wan</a>
+	 * @since 1.0.0
+	 */
 	static class FlywayModularizedJdbcOperationsDependsOnPostProcessor extends JdbcOperationsDependsOnPostProcessor {
 
 		FlywayModularizedJdbcOperationsDependsOnPostProcessor() {
@@ -483,6 +583,11 @@ public class FlywayModularizedAutoConfiguration{
 	 *//*
 	@ConditionalOnClass(NamedParameterJdbcOperations.class)
 	@ConditionalOnBean(NamedParameterJdbcOperations.class)
+	/**
+	 * <p>Auto-configuration for FlywayModularizedNamedParameterJdbcOperationsDependencyConfiguration.</p>
+	 * @author <a href="https://github.com/loong10k">Loong Wan</a>
+	 * @since 1.0.0
+	 */
 	protected static class FlywayModularizedNamedParameterJdbcOperationsDependencyConfiguration
 			extends NamedParameterJdbcOperationsDependsOnPostProcessor {
 
@@ -508,11 +613,19 @@ public class FlywayModularizedAutoConfiguration{
 		}
 
 		@Override
+		/** @return return the convertible types. */
 		public Set<ConvertiblePair> getConvertibleTypes() {
 			return CONVERTIBLE_TYPES;
 		}
 
 		@Override
+		/**
+		 * <p>Convert.</p>
+		 * @param source
+		 * @param sourceType
+		 * @param targetType
+		 * @return the result
+		 */
 		public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
 			String value = ObjectUtils.nullSafeToString(source);
 			return MigrationVersion.fromVersion(value);

@@ -42,6 +42,11 @@ import org.springframework.boot.convert.DurationUnit;
 @Getter
 @Setter
 @ToString
+/**
+ * <p>Auto-configuration for FlywayModularizedProperties.</p>
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public class FlywayModularizedProperties {
 	
 	private static final String DEFAULT_FLYWAY_MODULE_PATH = "classpath:db/migration/{module}/{vendor}";
@@ -345,6 +350,7 @@ public class FlywayModularizedProperties {
 
 	private final FlywayProperties.Sqlserver sqlserver = new FlywayProperties.Sqlserver();
 
+	/** @return return whether create data source is enabled. */
 	public boolean isCreateDataSource() {
 		return this.url != null || this.user != null;
 	}

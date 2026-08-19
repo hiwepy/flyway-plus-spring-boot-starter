@@ -25,6 +25,10 @@ public class FlywayMigrationProvider implements FlywayMigrationStrategy, Applica
 	 * @param flyway the Flyway instance to migrate
 	 */
 	@Override
+	/**
+	 * <p>Migrate.</p>
+	 * @param flyway
+	 */
 	public void migrate(Flyway flyway) {
 
         try {
@@ -47,6 +51,7 @@ public class FlywayMigrationProvider implements FlywayMigrationStrategy, Applica
 	 * @param applicationEventPublisher the event publisher
 	 */
 	@Override
+	/** @param applicationEventPublisher set the application event publisher. */
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 		this.applicationEventPublisher = applicationEventPublisher;
 	}

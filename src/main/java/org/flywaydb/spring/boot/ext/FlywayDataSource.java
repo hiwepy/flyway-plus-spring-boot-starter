@@ -30,6 +30,11 @@ import java.lang.annotation.Target;
 @Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+/**
+ * <p>Auto-configuration for FlywayDataSource.</p>
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public @interface FlywayDataSource {
 
 }

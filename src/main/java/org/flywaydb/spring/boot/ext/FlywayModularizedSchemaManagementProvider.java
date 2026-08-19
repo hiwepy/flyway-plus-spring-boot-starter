@@ -48,6 +48,7 @@ public class FlywayModularizedSchemaManagementProvider implements SchemaManageme
 	 * @return {@link SchemaManagement#MANAGED} if managed, otherwise {@link SchemaManagement#UNMANAGED}
 	 */
 	@Override
+	/** @return return the schema management. */
 	public SchemaManagement getSchemaManagement(DataSource dataSource) {
 		return StreamSupport.stream(this.flywayInstances.spliterator(), false)
 				.map((flyway) -> flyway.getConfiguration().getDataSource()).filter(dataSource::equals).findFirst()

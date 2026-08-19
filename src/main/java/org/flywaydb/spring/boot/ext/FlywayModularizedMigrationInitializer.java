@@ -64,6 +64,9 @@ public class FlywayModularizedMigrationInitializer implements InitializingBean, 
 	 * @throws Exception if a migration fails
 	 */
 	@Override
+	/**
+	 * <p>After properties set.</p>
+	 */
 	public void afterPropertiesSet() throws Exception {
 		if (this.migrationStrategy != null) {
 			for (Flyway flyway : flyways) {
@@ -82,6 +85,7 @@ public class FlywayModularizedMigrationInitializer implements InitializingBean, 
 	 * @return the order
 	 */
 	@Override
+	/** @return return the order. */
 	public int getOrder() {
 		return this.order;
 	}
