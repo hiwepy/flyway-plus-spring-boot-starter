@@ -336,12 +336,6 @@ public class FlywayModularizedProperties {
 	 */
 	private Boolean detectEncoding;
 
-	private final FlywayProperties.Oracle oracle = new FlywayProperties.Oracle();
-
-	private final FlywayProperties.Postgresql postgresql = new FlywayProperties.Postgresql();
-
-	private final FlywayProperties.Sqlserver sqlserver = new FlywayProperties.Sqlserver();
-
 	public boolean isCreateDataSource() {
 		return this.url != null || this.user != null;
 	}
